@@ -286,7 +286,7 @@ func TestGetAcceptedUsersService(t *testing.T) {
 			},
 		},
 	}
-	err := db.Insert("decision", &decision3, nil)
+	err = db.Insert("decision", &decision3, nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -297,12 +297,12 @@ func TestGetAcceptedUsersService(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected_accept_list := models.FilteredDecisions{
+	expected_accept_list := models.AcceptList{
 		AcceptedUsers: []string{"testid2", "testid3"},
 	}
 
 	if !reflect.DeepEqual(accepted, &expected_accept_list) {
-		t.Errorf("Wrong decision info. Expected %v, got %v", expected_decisions, decisions)
+		t.Errorf("Wrong decision info. Expected %v, got %v", expected_accept_list, accepted)
 	}
 
 	CleanupTestDB(t)
