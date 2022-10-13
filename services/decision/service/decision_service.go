@@ -64,7 +64,7 @@ func GetAcceptedUsers() (*models.AcceptList, error) {
 	}
 
 	var accept_list models.AcceptList
-	for _, accept := range decisions {
+	for _, accept := range decisions.Decisions {
 		accept_list.AcceptedUsers = append(accept_list.AcceptedUsers, accept.ID)
 	}
 
