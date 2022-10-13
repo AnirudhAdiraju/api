@@ -56,8 +56,8 @@ func GetAcceptedUsers() (*models.AcceptList, error) {
 		"status": "ACCEPTED",
 	}
 
-	var decisions models.DecisionHistory
-	err := db.FindAll("decision", query, &decisions, nil)
+	var decisions models.FilteredDecisions
+	err := db.FindAll("decision", query, &decisions.Decisions, nil)
 
 	if err != nil {
 		return nil, err
