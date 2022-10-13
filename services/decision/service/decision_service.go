@@ -49,6 +49,30 @@ func GetDecision(id string) (*models.DecisionHistory, error) {
 }
 
 /*
+	Returns a list of all user IDs who were accepted
+*/
+func GetAcceptedUsers() (*models.AcceptList, error) {
+	query := database.QuerySelector{
+		"status": "ACCEPTED",
+	}
+
+	var decisions models.DecisionHistory
+	err := db.FindAll("decision", query, &decisions, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var accept_list models.AcceptList
+	for _, accept := range decisions {
+		accept_list.AcceptedUsers = append(accept_list.AcceptedUsers, accept.ID)
+	}
+
+	return &accept_list, nil
+
+}
+
+/*
 	Updates the decision associated with the given user id
 	If a decision doesn't exist it will be created
 */

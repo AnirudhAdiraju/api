@@ -237,3 +237,73 @@ func TestGetFilteredDecisionsService(t *testing.T) {
 
 	CleanupTestDB(t)
 }
+
+/*
+	Service level test for getting all accepted users
+*/
+func TestGetAcceptedUsersService(t *testing.T) {
+	SetupTestDB(t)
+
+	decision2 := models.DecisionHistory{
+		ID:        "testid2",
+		Status:    "ACCEPTED",
+		Wave:      1,
+		Reviewer:  "reviewerid",
+		Timestamp: 2,
+		ExpiresAt: 7,
+		History: []models.Decision{
+			{
+				ID:        "testid2",
+				Status:    "PENDING",
+				Wave:      1,
+				Reviewer:  "reviewerid",
+				Timestamp: 2,
+				ExpiresAt: 7,
+			},
+		},
+	}
+	err := db.Insert("decision", &decision2, nil)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	decision3 := models.DecisionHistory{
+		ID:        "testid3",
+		Status:    "ACCEPTED",
+		Wave:      1,
+		Reviewer:  "reviewerid",
+		Timestamp: 2,
+		ExpiresAt: 7,
+		History: []models.Decision{
+			{
+				ID:        "testid3",
+				Status:    "PENDING",
+				Wave:      1,
+				Reviewer:  "reviewerid",
+				Timestamp: 2,
+				ExpiresAt: 7,
+			},
+		},
+	}
+	err := db.Insert("decision", &decision3, nil)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	accepted, err := service.GetAcceptedUsers()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected_accept_list := models.FilteredDecisions{
+		AcceptedUsers: []string{"testid2", "testid3"},
+	}
+
+	if !reflect.DeepEqual(accepted, &expected_accept_list) {
+		t.Errorf("Wrong decision info. Expected %v, got %v", expected_decisions, decisions)
+	}
+
+	CleanupTestDB(t)
+}

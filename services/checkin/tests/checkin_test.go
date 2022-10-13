@@ -231,26 +231,26 @@ func TestGetAllUsersWithSwagService(t *testing.T) {
 	SetupTestDB(t)
 
 	new_checkin := models.UserCheckin{
-		ID:              "testid4",
+		ID:              "testid2",
 		HasCheckedIn:    true,
 		HasPickedUpSwag: true,
 		RsvpData:        map[string]interface{}{},
 	}
 
-	err := service.CreateUserCheckin("testid4", new_checkin)
+	err := service.CreateUserCheckin("testid2", new_checkin)
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	new_checkin = models.UserCheckin{
-		ID:              "testid5",
+		ID:              "testid3",
 		HasCheckedIn:    true,
 		HasPickedUpSwag: true,
 		RsvpData:        map[string]interface{}{},
 	}
 
-	err = service.CreateUserCheckin("testid5", new_checkin)
+	err = service.CreateUserCheckin("testid3", new_checkin)
 
 	if err != nil {
 		t.Fatal(err)
@@ -263,7 +263,7 @@ func TestGetAllUsersWithSwagService(t *testing.T) {
 	}
 
 	expected_swag_pickup_list := models.CheckinList{
-		CheckedInUsers: []string{"testid", "testid4", "testid5"},
+		CheckedInUsers: []string{"testid", "testid2", "testid3"},
 	}
 
 	if !reflect.DeepEqual(swag_pickup_list, &expected_swag_pickup_list) {

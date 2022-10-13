@@ -24,6 +24,7 @@ func SetupController(route *mux.Route) {
 	metrics.RegisterHandler("/", UpdateDecision, "POST", router)
 	metrics.RegisterHandler("/finalize/", FinalizeDecision, "POST", router)
 	metrics.RegisterHandler("/filter/", GetFilteredDecisions, "GET", router)
+	metrics.RegisterHandler("/accepted/", GetAcceptedUsers, "GET", router)
 	metrics.RegisterHandler("/{id}/", GetDecision, "GET", router)
 	metrics.RegisterHandler("/internal/stats/", GetStats, "GET", router)
 }
@@ -179,6 +180,20 @@ func FinalizeDecision(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(updated_decision)
+}
+
+/*
+	Endpoint to get all user IDs of accepted users
+*/
+func GetAcceptedUsers(w http.ResponseWriter, r *http.Request) {
+	accepted_users, err := service.GetAcceptedUsers()
+
+	if err != nil {
+		errors.WriteError(w, r, errors.DatabaseError(err.Error(), "Could not get all accepted users."))
+		return
+	}
+
+	json.NewEncoder(w).Encode(accepted_users)
 }
 
 /*
