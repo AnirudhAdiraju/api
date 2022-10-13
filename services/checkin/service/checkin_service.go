@@ -137,6 +137,29 @@ func GetAllCheckedInUsers() (*models.CheckinList, error) {
 }
 
 /*
+	Returns a list of user IDs of users who have picked up swag
+*/
+func GetAllUsersWithSwag() (*models.CheckinList, error) {
+	query := database.QuerySelector{
+		"haspickedupswag": true,
+	}
+
+	var check_ins []models.UserCheckin
+	err := db.FindAll("checkins", query, &check_ins, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var swag_pickup_list models.CheckinList
+	for _, check_in := range check_ins {
+		swag_pickup_list.CheckedInUsers = append(swag_pickup_list.CheckedInUsers, check_in.ID)
+	}
+
+	return &swag_pickup_list, nil
+}
+
+/*
 	Returns all checkin stats
 */
 func GetStats() (map[string]interface{}, error) {

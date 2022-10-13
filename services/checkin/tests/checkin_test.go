@@ -223,3 +223,52 @@ func TestGetAllCheckedInUsersService(t *testing.T) {
 
 	CleanupTestDB(t)
 }
+
+/*
+	Service level test for getting list of all users with swag
+*/
+func TestGetAllCheckedInUsersService(t *testing.T) {
+	SetupTestDB(t)
+
+	new_checkin := models.UserCheckin{
+		ID:              "testid4",
+		HasCheckedIn:    true,
+		HasPickedUpSwag: true,
+		RsvpData:        map[string]interface{}{},
+	}
+
+	err := service.CreateUserCheckin("testid4", new_checkin)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	new_checkin = models.UserCheckin{
+		ID:              "testid5",
+		HasCheckedIn:    true,
+		HasPickedUpSwag: true,
+		RsvpData:        map[string]interface{}{},
+	}
+
+	err = service.CreateUserCheckin("testid5", new_checkin)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	swag_pickup_list, err := service.GetAllUsersWithSwag()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected_swag_pickup_list := models.CheckinList{
+		CheckedInUsers: []string{"testid4", "testid5"},
+	}
+
+	if !reflect.DeepEqual(swag_pickup_list, &expected_swag_pickup_list) {
+		t.Errorf("Wrong user info. Expected %v, got %v", expected_swag_pickup_list, swag_pickup_list)
+	}
+
+	CleanupTestDB(t)
+}

@@ -21,6 +21,7 @@ func SetupController(route *mux.Route) {
 	metrics.RegisterHandler("/", UpdateUserCheckin, "PUT", router)
 	metrics.RegisterHandler("/", GetCurrentUserCheckin, "GET", router)
 	metrics.RegisterHandler("/list/", GetAllCheckedInUsers, "GET", router)
+	metrics.RegisterHandler("/swag/", GetAllUsersWithSwag, "GET", router)
 	metrics.RegisterHandler("/{id}/", GetUserCheckin, "GET", router)
 	metrics.RegisterHandler("/internal/stats/", GetStats, "GET", router)
 }
@@ -184,6 +185,20 @@ func GetAllCheckedInUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(checked_in_users)
+}
+
+/*
+	Endpoint to get all user IDs of users with swag
+*/
+func GetAllUsersWithSwag(w http.ResponseWriter, r *http.Request) {
+	users_with_swag, err := service.GetAllUsersWithSwag()
+
+	if err != nil {
+		errors.WriteError(w, r, errors.DatabaseError(err.Error(), "Could not get all users with swag."))
+		return
+	}
+
+	json.NewEncoder(w).Encode(users_with_swag)
 }
 
 /*
