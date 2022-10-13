@@ -263,7 +263,7 @@ func TestGetAllUsersWithSwagService(t *testing.T) {
 	}
 
 	expected_swag_pickup_list := models.CheckinList{
-		CheckedInUsers: []string{"testid4", "testid5"},
+		CheckedInUsers: []string{"testid", "testid4", "testid5"},
 	}
 
 	if !reflect.DeepEqual(swag_pickup_list, &expected_swag_pickup_list) {
