@@ -227,7 +227,7 @@ func TestGetAllCheckedInUsersService(t *testing.T) {
 /*
 	Service level test for getting list of all users with swag
 */
-func TestGetAllCheckedInUsersService(t *testing.T) {
+func TestGetAllUsersWithSwagService(t *testing.T) {
 	SetupTestDB(t)
 
 	new_checkin := models.UserCheckin{
